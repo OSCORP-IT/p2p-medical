@@ -20,6 +20,7 @@ export default {
         islamic: "#0da500",
         blueText: "#000aff",
         textColor2: "#22252b",
+        headerColor: "#efa286",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

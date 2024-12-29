@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Logo from "../assets/Logo.png";
+import HeadEnvelope from "../icon/HeadEnvelope";
+import SmallText from "../components/SmallText";
+import Text from "../components/Text";
+import HeadCall from "../icon/HeadCall";
+import { FiLogIn } from "react-icons/fi";
 
 const Header = () => {
   const nav = useNavigate();
   const user = useSelector((state) => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [stickyMenu, setStickyMenu] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setStickyMenu(window.scrollY > 100); // Adjust the scroll value as needed
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Define main menu items and sub-menu items
   const menuItems = [
@@ -14,35 +32,26 @@ const Header = () => {
       name: "Home",
       path: "/",
     },
-    // {
-    //   name: "Check Your Rate",
-    //   path: "/check-rate",
-    // },
     {
-      name: "Mental Health",
-      path: "/mental-health",
+      name: "Fertility",
+      path: "/fertility",
     },
     {
       name: "Dental",
       path: "/dental",
     },
     {
-      name: "Fertility",
-      path: "/fertility",
+      name: "Blog",
+      path: "/",
     },
     {
-      name: "Plastic Surgery",
-      path: "/plastic-surgery",
+      name: "About Us",
+      path: "/",
     },
     {
-      name: "Bariatric Surgery",
-      path: "/weight-loss",
+      name: "Contact Us",
+      path: "/",
     },
-    // {
-    //   name: user.isLoggedIn ? user.userName : "Log In",
-    //   path: "/auth/login",
-    //   subItems: [],
-    // },
   ];
 
   const handleSubMenuToggle = (index) => {
@@ -50,49 +59,105 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white text-black shadow-md">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div
-            className="flex-shrink-0 cursor-pointer"
-            onClick={() => nav("/")}
-          >
-            <h1 className="text-xl font-bold text-primary">P2P Medical</h1>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8">
-            {menuItems.map((menu, index) => (
-              <div key={index} className="relative group z-50">
-                <button
-                  className="hover:bg-gray-200 px-3 py-2 text-sm font-medium"
-                  onClick={() => nav(menu.path)}
-                >
-                  {menu.name}
-                </button>
+    <header className="">
+      <nav className="py-2 shadow-md">
+        <div className="hidden tab:block">
+          <div className="w-full">
+            <div className="flex justify-between px-4 tab:px-0 tab:w-11/12 laptop:w-5/6 m-auto">
+              <img src={Logo} alt="logo" className="h-14" />
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-full border border-headerColor">
+                    <HeadEnvelope />
+                  </div>
+                  <div>
+                    <SmallText
+                      padding={`py-0`}
+                      font={`font-semibold`}
+                      color={`textColor1`}
+                    >
+                      info@fintech.com
+                    </SmallText>
+                    <h6 className="text-xs text-textColor3">Email Now !</h6>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-full border border-headerColor">
+                    <HeadCall />
+                  </div>
+                  <div>
+                    <SmallText
+                      padding={`py-0`}
+                      font={`font-semibold`}
+                      color={`textColor1`}
+                    >
+                      +880 1XXX XXXXXX
+                    </SmallText>
+                    <h6 className="text-xs text-textColor3">Call Now !</h6>
+                  </div>
+                </div>
+                {!user.isLoggedIn && (
+                  <button className="flex items-center gap-2 uppercase px-6 py-2 bg-headerColor rounded-md hover:bg-accent">
+                    <Text font={`font-semibold `} color={`white`}>
+                      login
+                    </Text>
+                    <FiLogIn className="text-white text-xl" />
+                  </button>
+                )}
+                {user.isLoggedIn && (
+                  <div className="flex items-center gap-2 cursor-pointer border border-gray-300 rounded-md p-1 hover hover:bg-secondary/20">
+                    <img
+                      src="https://www.admin-p2p.alzakati.com/assets/images/avator.png"
+                      alt="profile image"
+                      className="w-10 h-10 rounded-full object-center"
+                    />
+                    <Text>{user.userName}</Text>
+                  </div>
+                )}
               </div>
-            ))}
-            {user.isLoggedIn && (
-              <button
-                className="hover:bg-gray-200 px-3 py-2 text-sm font-medium"
-                onClick={() => nav("/user/dashboard")}
-              >
-                {user.userName}
-              </button>
-            )}
-            {!user.isLoggedIn && (
-              <button
-                className="hover:bg-gray-200 px-3 py-2 text-sm font-medium"
-                onClick={() => nav("/auth/login")}
-              >
-                Log In
-              </button>
-            )}
+            </div>
           </div>
+          <div
+            className={`w-full py-2 bg-white  border-t border-t-gray-300  ${
+              stickyMenu
+                ? "fixed shadow-md top-0 "
+                : "-top-[65px] tab:-top-[70px] mt-2"
+            } left-0 z-50 transition-top duration-500 ease-in-out`}
+          >
+            <div className="flex justify-end items-center px-4 tab:px-0 tab:w-11/12 laptop:w-5/6 m-auto">
+              {/* Desktop Menu */}
+              <div className="hidden md:flex space-x-6">
+                {menuItems.map((menu, index) => (
+                  <div key={index} className="relative group z-50">
+                    <button
+                      className="hover:bg-secondary/30 rounded-md px-3 py-2"
+                      onClick={() => nav(menu.path)}
+                    >
+                      <SmallText
+                        color={`primary uppercase`}
+                        font={`font-semibold tracking-wider`}
+                        padding={"py-0"}
+                      >
+                        {menu.name}
+                      </SmallText>
+                    </button>
+                  </div>
+                ))}
+              </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+              {/* Mobile Menu Button */}
+            </div>
+          </div>
+        </div>
+        {/* Mobile Menu */}
+        <div
+          className={`tab:hidden flex items-center justify-between px-2 shadow-md py-2 ${
+            stickyMenu
+              ? "fixed shadow-md top-0 w-full bg-white z-50"
+              : "-top-[65px] mt-2"
+          } transition-top duration-500 ease-in-out`}
+        >
+          <div>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-black focus:outline-none"
@@ -113,11 +178,30 @@ const Header = () => {
               </svg>
             </button>
           </div>
+          <img src={Logo} alt="logo" />
+          {!user.isLoggedIn && (
+            <button className="flex items-center gap-2 uppercase px-6 py-2 bg-headerColor rounded-md">
+              <Text font={`font-semibold `} color={`white`}>
+                login
+              </Text>
+              <FiLogIn className="text-white text-xl" />
+            </button>
+          )}
+          {user.isLoggedIn && (
+            <div className="flex items-center gap-2 cursor-pointer border border-gray-300 rounded-md p-1 hover hover:bg-secondary/20">
+              <img
+                src="https://www.admin-p2p.alzakati.com/assets/images/avator.png"
+                alt="profile image"
+                className="w-10 h-10 rounded-full object-center"
+              />
+              <Text color={`primary`} font={`font-semibold`}>
+                {user.userName}
+              </Text>
+            </div>
+          )}
         </div>
-
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-2 space-y-2">
+          <div className="tab:hidden mt-2 sm:pt-4 space-y-2 border-b-2 border-primary fixed top-[55px] w-1/2 h-screen bg-white">
             {menuItems.map((menu, index) => (
               <div key={index} className="space-y-1">
                 {/* Toggle only sub-menu open/close on mobile */}

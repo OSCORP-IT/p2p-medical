@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const FIVE_MINUTES = 20 * 60 * 1000;
+const FIVE_MINUTES = 5 * 60 * 1000;
 
 // Load initial state from localStorage if session is still valid
 const loadStateFromLocalStorage = () => {
-  const savedState = JSON.parse(localStorage.getItem("authState"));
+  const savedState = JSON.parse(localStorage.getItem("authStateMedical"));
   const lastActivityTime = localStorage.getItem("lastActivityTime");
 
   if (savedState && lastActivityTime) {
@@ -14,7 +14,7 @@ const loadStateFromLocalStorage = () => {
     if (timeGap < FIVE_MINUTES) {
       // Update `inTime` to the latest time
       savedState.inTime = currentTime;
-      localStorage.setItem("authState", JSON.stringify(savedState)); // Update saved state
+      localStorage.setItem("authStateMedical", JSON.stringify(savedState)); // Update saved state
       localStorage.setItem("lastActivityTime", currentTime); // Refresh last activity time
       return savedState;
     }
@@ -42,7 +42,7 @@ const authSlice = createSlice({
       state.inTime = new Date().getTime();
 
       // Save login state and time to localStorage
-      localStorage.setItem("authState", JSON.stringify(state));
+      localStorage.setItem("authStateMedical", JSON.stringify(state));
       localStorage.setItem("lastActivityTime", state.inTime);
     },
     logOut: (state) => {
@@ -50,7 +50,7 @@ const authSlice = createSlice({
       state.userToken = "";
       state.userName = "";
       state.inTime = "";
-      localStorage.removeItem("authState");
+      localStorage.removeItem("authStateMedical");
       localStorage.removeItem("lastActivityTime");
     },
   },
