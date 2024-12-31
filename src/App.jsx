@@ -10,10 +10,12 @@ import PLBariatric from "./pages/pl-weightloss/PLBariatric";
 import CheckYourRate from "./pages/check-your-rate/CheckYourRate";
 import LogIn from "./pages/login/LogIn";
 import Registration from "./pages/login/Registration";
+import Error from "./ui/Error";
 
 const router = createBrowserRouter([
   {
     element: <Applayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -44,14 +46,17 @@ const router = createBrowserRouter([
   {
     path: "/check-rate",
     element: <CheckYourRate />,
+    errorElement: <Error />,
   },
   {
     path: "/auth/login",
     element: <LogIn />,
+    errorElement: <Error />,
   },
   {
     path: "/auth/registration",
     element: <Registration />,
+    errorElement: <Error />,
   },
 ]);
 function App() {
